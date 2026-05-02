@@ -156,10 +156,6 @@ app.get('/api/notes', async (c) => {
 
 
 
-
-
-
-
 // Jalankan Server (untuk lokal)
 if (process.env.VERCEL) {
   console.log('Running on Vercel');

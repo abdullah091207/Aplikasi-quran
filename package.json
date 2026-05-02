@@ -16,13 +16,17 @@
   "license": "ISC",
   "dependencies": {
     "@hono/node-server": "^2.0.0",
+    "@neondatabase/serverless": "^1.1.0",
+    "@vercel/postgres": "^0.10.0",
     "bcryptjs": "^3.0.3",
     "cookie": "^1.1.1",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "hono": "^4.12.15",
     "jsonwebtoken": "^9.0.3",
-    "page": "^1.11.6"
+    "page": "^1.11.6",
+    "pg": "^8.20.0",
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.10"
