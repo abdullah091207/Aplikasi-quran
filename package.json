@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "node db/seed.js"
+    "db:seed": "node db/seed.js",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +17,11 @@
   "dependencies": {
     "@hono/node-server": "^2.0.0",
     "bcryptjs": "^3.0.3",
+    "cookie": "^1.1.1",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "hono": "^4.12.15",
+    "jsonwebtoken": "^9.0.3",
     "page": "^1.11.6"
   },
   "devDependencies": {

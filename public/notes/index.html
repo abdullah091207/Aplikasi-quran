@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catatan Quran Saya</title>
+</head>
+<body>
+  <div>
+    <header>
+      <h1>Halo, <span id="username"></span></h1>
+      <a href="/logout/">logout</a>
+    </header>
+
+    <main>
+      <h2>Catatan/Refleksi Quran Anda</h2>
+      <form id="addNoteForm">
+        <input type="text" id="surahAyahInput" placeholder="Surah:Ayat (misal: Al-Baqarah: 286)" required />
+        <textarea id="noteInput" placeholder="Tuliskan catatan refleksi Anda..." required></textarea>
+        <button type="submit">Tambah Catatan</button>
+      </form>
+
+      <h2>Daftar Catatan</h2>
+      <ul id="notesList"></ul>
+    </main>
+  </div>
+
+  <script>
+    const API_URL = window.location.origin;
+    const usernameSpan = document.getElementById('username');
+    const addNoteForm = document.getElementById('addNoteForm');
+    const surahAyahInput = document.getElementById('surahAyahInput'); // PERUBAHAN
+    const noteInput = document.getElementById('noteInput');
+    const notesList = document.getElementById('notesList'); // PERUBAHAN
+
+    // 1. Periksa status login & dapatkan data pengguna
+    (async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/me`, { credentials: 'include' });
+        if (!response.ok) {
+          window.location.href = '/login/';
+          return;
+        }
+
+        const { success, data } = await response.json();
+        if (success) {
+          usernameSpan.textContent = data.username;
+          fetchNotes(); // Muat catatan setelah user terverifikasi
+        } else {
+          window.location.href = '/login/';
+        }
+      } catch (error) {
+        window.location.href = '/login/';
+      }
+    })();
+
+    // 2. Fungsi untuk mengambil dan menampilkan catatan
+    const fetchNotes = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/notes`, { credentials: 'include' }); // endpoint GET
+        const { success, data } = await response.json();
+
+        if (success) {
+          notesList.innerHTML = ""; // Kosongkan daftar
+          data.forEach((note) => {
+            const li = document.createElement('li');
+            // PERUBAHAN: tampilkan Surah/Ayat dan catatan
+            li.innerHTML = `<strong>${note.surah_ayah}:</strong> ${note.note}`;
+            notesList.appendChild(li);
+          });
+        }
+      } catch (error) {
+        console.error('Gagal mengambil catatan:', error);
+      }
+    };
+
+    // 3. Event listener untuk menambah catatan baru
+    addNoteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const surah_ayah = surahAyahInput.value; // PERUBAHAN
+      const note = noteInput.value;
+
+      if (!surah_ayah || !note) return;
+
+      try {
+        const response = await fetch(`${API_URL}/api/notes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ surah_ayah, note }), // PERUBAHAN
+          credentials: 'include'
+        });
+
+        const { success } = await response.json();
+        if (success) {
+          surahAyahInput.value = '';
+          noteInput.value = '';
+          fetchNotes(); // Muat ulang daftar catatan
+        }
+      } catch (error) {
+        console.error('Gagal menambah catatan:', error);
+      }
+    });
+  </script>
+</body>
+</html>

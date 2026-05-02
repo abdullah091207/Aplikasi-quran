@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logging Out...</title>
+</head>
+<body>
+  <h1>Anda sedang keluar...</h1>
+  <script>
+    const API_URL = window.location.origin;
+    (async () => {
+      try {
+        await fetch(`${API_URL}/api/logout`, { method: 'POST', credentials: 'include' });
+      } catch (error) {
+        console.error('Logout failed:', error);
+      } finally {
+        window.location.href = '/login/';
+      }
+    })();
+  </script>
+</body>
+</html>
